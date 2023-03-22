@@ -208,6 +208,9 @@ class telegramController extends Controller
                     $keyboard = array("inline_keyboard" => $inline_keyboard);
                     $this->sendKeyboard($data['chat']['id'],'Посмотреть каталог', $keyboard);
                     break;
+                case "/help":
+                    $bot->sendMessage(config('conftelegram.telegram.admin'), $data['chat']['id']);
+                    break;
                 default:
 
                     $bot->sendMessage($data['chat']['id'], 'wtf!' . json_encode($data));
