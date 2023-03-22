@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+/**
+ * TelegramBot
+ */
+Route::post('send/bot/message/',[\App\Http\Controllers\Telegram\telegramController::class, 'SendMessage'])->name('send.message.bot');
+Route::any('telegramsecret', [\App\Http\Controllers\Telegram\telegramController::class, 'getTelegramData']);
