@@ -6,12 +6,28 @@ use App\Http\Controllers\Controller;
 use App\Models\Orders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Telegram\UserController;
+use App\Http\Controllers\Telegram\MessageController;
 
 class telegramController extends Controller
 {
+
     /**
-     * Методы взаимодействия с сайтом из бота
+     * Методы взаимодействия с сайтом из ботаoy
      */
+    public function getMess()
+    {
+        /**
+         * Получим данные от телеграм
+         * @param $data array
+         */
+        $content = file_get_contents("php://input");
+        $data = json_decode($content, true);
+
+        $data = new UpdateDateController($data['message']);
+
+    }
+
     public function getTelegramData()
     {
         $bot = new \TelegramBot\Api\BotApi(config('conftelegram.telegram.token'));
@@ -149,6 +165,10 @@ class telegramController extends Controller
             $data = $data['message'];
             $message = mb_strtolower($data['text']);
 
+            /**
+             * Если получили команду
+             */
+
             switch ($message) {
                 case '/start':
                     if ($data['chat']['id'] == config('conftelegram.telegram.admin') ||$data['chat']['id'] == config('conftelegram.telegram.manager')) {
@@ -209,12 +229,14 @@ class telegramController extends Controller
                     $this->sendKeyboard($data['chat']['id'],'Посмотреть каталог', $keyboard);
                     break;
                 case "/help":
-                    $bot->sendMessage(config('conftelegram.telegram.admin'), $data['chat']['id']);
+                    $bot->sendMessage($data['chat']['id'], 'hello world');//'-1001544908866'
                     break;
                 default:
 
                     $bot->sendMessage($data['chat']['id'], 'wtf!' . json_encode($data));
             }
+        } else{
+            $bot->sendMessage($data['chat']['id'], 'Что это?' . json_encode($data));
         }
     }
 

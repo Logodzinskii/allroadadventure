@@ -20,4 +20,4 @@ Route::get('/', function () {
  * TelegramBot
  */
 Route::post('send/bot/message/',[\App\Http\Controllers\Telegram\telegramController::class, 'SendMessage'])->name('send.message.bot');
-Route::any('telegramsecret', [\App\Http\Controllers\Telegram\telegramController::class, 'getTelegramData']);
+Route::any('telegramsecret', [\App\Http\Controllers\Telegram\telegramController::class, 'getMess']);
