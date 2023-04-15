@@ -24,7 +24,15 @@ class telegramController extends Controller
         $content = file_get_contents("php://input");
         $data = json_decode($content, true);
 
-        $data = new UpdateDateController($data['message']);
+        //$data = new UpdateDateController($data['message']);
+        if (!empty($data['message']['text'])) {
+
+            $data = new UpdateDateController($data['message']);
+
+        }else{
+            file_put_contents('message.txt', print_r($data, true));
+        }
+
 
     }
 
@@ -229,11 +237,14 @@ class telegramController extends Controller
                     $this->sendKeyboard($data['chat']['id'],'Посмотреть каталог', $keyboard);
                     break;
                 case "/help":
+
                     $bot->sendMessage($data['chat']['id'], 'hello world');//'-1001544908866'
+
                     break;
                 default:
 
-                    $bot->sendMessage($data['chat']['id'], 'wtf!' . json_encode($data));
+                    $bot->sendMessage('-1001544908866', 'wtf!group' . json_encode($data));
+
             }
         } else{
             $bot->sendMessage($data['chat']['id'], 'Что это?' . json_encode($data));
