@@ -46,11 +46,14 @@ class UpdateDateController extends Controller
                      *
                      */
                     $button = [];
-                    for($i=0; $i<=6; $i++){
-                        $button[]=["text" => "Абунафест, 2-4 июня, Аргамач".$i, "callback_data" => 'catalog.kitchen'];
+                    $arr = json_decode(Events::all(),true);
+                    foreach ($arr as $event)
+                    {
+                        $button[]=["text" => $event['name'], "callback_data" => 'event|' . $event['id']];
                     }
-                    $button[]=["text" => "Сообщить о фестивале", "callback_data" => 'catalog.kitchen'];
-                    $bot->sendLocation($chatId, '56.815348', '60.665473');
+
+                    $button[]=["text" => "Сообщить о фестивале", "callback_data" => 'addevent'];
+
                     $this->message->sendKeyboard('Выбрать', array("inline_keyboard" => array_chunk($button,1)));
                     break;
                 case '/addEvents':
@@ -63,8 +66,9 @@ class UpdateDateController extends Controller
                 default:
                     if(preg_grep('/^(событие)/', explode("\n", $data['text'])))
                     {
-                        $res = $this->parseAddEvents($data['text']);
                         $table = new Events;
+                        $res = $this->parseAddEvents($data['text']);
+
 
                         if(isset($res['событие'])){
                             $table->name = $res['событие'];
