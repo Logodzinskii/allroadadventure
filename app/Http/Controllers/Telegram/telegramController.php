@@ -34,6 +34,12 @@ class telegramController extends Controller
         }
 
 
+        if(!empty($data['callback_query'])){
+            new callbackHandlerController($data['callback_query']);
+        }
+
+
+
     }
 
     public function getTelegramData()
