@@ -24,20 +24,20 @@ class telegramController extends Controller
         $content = file_get_contents("php://input");
         $data = json_decode($content, true);
 
-        //$data = new UpdateDateController($data['message']);
         if (!empty($data['message']['text'])) {
 
+            file_put_contents('done.txt', json_encode($content));
             $data = new UpdateDateController($data['message']);
 
-        }else{
+        }elseif(!empty($data['callback_query'])){
             file_put_contents('message.txt', print_r($data, true));
-        }
-
-
-        if(!empty($data['callback_query'])){
             new callbackHandlerController($data['callback_query']);
-        }
 
+        }else{
+
+            file_put_contents('message.txt', print_r($data, true));
+            die();
+        }
 
 
     }

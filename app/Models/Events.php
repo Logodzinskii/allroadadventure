@@ -17,6 +17,8 @@ class Events extends Model
         'longitude',
         'image',
         'contacts',
+        'date_start',
+        'date_stop',
     ];
 
 }

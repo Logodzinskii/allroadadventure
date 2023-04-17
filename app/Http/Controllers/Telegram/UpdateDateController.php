@@ -64,37 +64,37 @@ class UpdateDateController extends Controller
 
                     break;
                 default:
+                    $table = new Events;
                     if(preg_grep('/^(событие)/', explode("\n", $data['text'])))
                     {
-                        $table = new Events;
                         $res = $this->parseAddEvents($data['text']);
-
 
                         if(isset($res['событие'])){
                             $table->name = $res['событие'];
 
-                        }elseif (isset($res['сайт'])) {
+                        }
+                        if (isset($res['сайт'])) {
                             $table->webUrl = $res['сайт'];
 
-                        }elseif (isset($res['description'])) {
+                        }
+                        if (isset($res['description'])) {
                             $table->description ='';
 
-                        }elseif (isset($res['координаты'])) {
+                        }
+                        if (isset($res['координаты'])) {
                             $coordinate = explode(',', $res['координаты']);
                             $table->latitude = $coordinate[0];
                             $table->longitude = $coordinate[1];
-                    }else{
-                            $table->name = 'error';
+
                         }
                         $table->save();
                         /**
                          * Добавляем данные в базу данных
                          */
 
-                        $loc = explode(',', $res[4]);
-                        $bot->sendLocation($chatId, $loc[0], $loc[1]);
+                        $loc = explode(',', $res['координаты']);
 
-                        $bot->sendMessage($chatId, $res[0] . ', '. $res[1] . ', ' . $res[2] . ', ' . $res[3] . ', ' . $res[5] . '.');
+                        $bot->sendMessage($chatId, 'Событие добавлено');
 
                     }elseif (preg_match('/(^Дата начала )(\d\d)[.](\d\d)[.](\d\d\d\d)/', $data['text'], $output_array))
                     {
